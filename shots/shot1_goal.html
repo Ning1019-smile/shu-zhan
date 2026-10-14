@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #F6F7F9; }
+  .stage { width: 1280px; height: 720px; overflow: hidden; display: flex; flex-direction: column; background: #F6F7F9; }
+  /* 顶栏 */
+  .top { height: 52px; background: #fff; display: flex; align-items: center; gap: 10px; padding: 0 16px; flex-shrink: 0; }
+  .logo { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #12A96A, #066B42); flex-shrink: 0; }
+  .appname { font-size: 16px; font-weight: bold; color: #1A1A1A; }
+  .select { border: 1px solid #E3E3E6; border-radius: 8px; padding: 5px 12px; font-size: 13px; color: #1A1A1A; background: #fff; display: flex; align-items: center; gap: 18px; }
+  .caret { color: #9CA3AF; font-size: 10px; }
+  .sbtn { font-size: 12px; color: #1A1A1A; background: #EFEFF2; border-radius: 8px; padding: 5px 10px; }
+  .sbtn.danger { color: #D5484A; }
+  .space { flex: 1; }
+  .search { width: 230px; height: 30px; border: 1px solid #E3E3E6; border-radius: 8px; font-size: 12px; color: #9CA3AF; display: flex; align-items: center; padding: 0 10px; background: #fff; }
+  /* 主体 */
+  .main { flex: 1; display: flex; overflow: hidden; }
+  .side { width: 240px; background: #fff; border-right: 1px solid #ECECEE; padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+  .side-head { display: flex; align-items: center; }
+  .side-title { font-size: 13px; font-weight: 600; color: #6B7280; }
+  .ch { font-size: 14px; color: #1A1A1A; padding: 7px 12px; border-radius: 8px; white-space: nowrap; overflow: hidden; }
+  .ch.sub { font-size: 13px; padding-left: 30px; }
+  .ch.active { background: #E2F8EC; color: #01603A; font-weight: 600; }
+  .divider { height: 1px; background: #ECECEE; }
+  .side-btns { display: flex; gap: 8px; }
+  /* 工作区 */
+  .work { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .ch-title { font-size: 18px; font-weight: bold; color: #1A1A1A; padding: 14px 16px 0; }
+  .tabs { display: flex; margin-top: 10px; }
+  .tab { flex: 1; text-align: center; font-size: 14px; color: #6B7280; padding: 10px 0; position: relative; }
+  .tab.active { color: #0A9A57; font-weight: 600; }
+  .tab.active::after { content: ""; position: absolute; left: 30%; right: 30%; bottom: 0; height: 3px; border-radius: 2px; background: #0A9A57; }
+  .pane { flex: 1; padding: 14px 16px; overflow: hidden; display: flex; flex-direction: column; gap: 10px; }
+  .pane-head { display: flex; align-items: center; gap: 10px; }
+  .pane-title { font-size: 16px; font-weight: 600; color: #1A1A1A; }
+  .pane-count { font-size: 12px; color: #6B7280; }
+  .add-btn { margin-left: auto; background: #0A9A57; color: #fff; font-size: 13px; border-radius: 8px; padding: 7px 16px; }
+  .bar { flex: 1; height: 6px; background: #EFEFF2; border-radius: 3px; overflow: hidden; }
+  .bar > div { width: 62%; height: 100%; background: #0A9A57; border-radius: 3px; }
+  .goal { background: #fff; border: 1px solid #ECECEE; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+  .check { width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .check.on { background: #0A9A57; color: #fff; }
+  .check.off { border: 1.5px solid #D8DADD; background: #fff; }
+  .goal-text { font-size: 15px; color: #1A1A1A; }
+  .goal.done .goal-text { color: #6B7280; text-decoration: line-through; text-decoration-color: #9CA3AF; opacity: .85; }
+  .x { color: #6B7280; font-size: 13px; margin-left: auto; }
+  /* 右栏 */
+  .quick { width: 220px; background: #fff; border-left: 1px solid #ECECEE; padding: 12px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+  .q-title { font-size: 13px; font-weight: 600; color: #6B7280; }
+  .stat { display: flex; font-size: 12px; }
+  .stat .k { color: #6B7280; }
+  .stat .v { margin-left: auto; color: #1A1A1A; }
+  .qbar { height: 5px; background: #EFEFF2; border-radius: 3px; overflow: hidden; }
+  .qbar > div { width: 62%; height: 100%; background: #0A9A57; }
+  .term { padding: 5px 8px; border-radius: 6px; }
+  .term-name { font-size: 13px; color: #1A1A1A; display: flex; }
+  .term-page { margin-left: auto; font-size: 11px; color: #6B7280; }
+  .term-ch { font-size: 11px; color: #6B7280; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top">
+    <div class="logo"></div><div class="appname">书栈</div>
+    <div class="select">数据结构 <span class="caret">▼</span></div>
+    <div class="sbtn">＋ 课程</div><div class="sbtn">✎</div><div class="sbtn danger">✕</div>
+    <div class="space"></div>
+    <div class="search">搜索术语 / 问题 / 目标</div>
+    <div class="sbtn">导出</div><div class="sbtn">导入</div>
+  </div>
+  <div class="main">
+    <div class="side">
+      <div class="side-head"><span class="side-title">章节</span><div class="space"></div><div class="sbtn">＋ 章</div></div>
+      <div class="ch active">第1章 绪论</div>
+      <div class="ch sub">1.1 数据结构概述</div>
+      <div class="ch sub">1.2 算法与时间复杂度</div>
+      <div class="ch">第2章 线性表</div>
+      <div class="ch">第3章 栈与队列</div>
+      <div class="ch">第4章 串与数组</div>
+      <div class="space"></div>
+      <div class="divider"></div>
+      <div class="side-btns"><div class="sbtn">＋ 小节</div><div class="sbtn">改名</div><div class="sbtn danger">删除</div></div>
+    </div>
+    <div class="work">
+      <div class="ch-title">第1章 绪论</div>
+      <div class="tabs">
+        <div class="tab active">章节目标</div><div class="tab">术语表</div><div class="tab">阅读问题</div>
+      </div>
+      <div class="pane">
+        <div class="pane-head">
+          <span class="pane-title">学习目标</span><span class="pane-count">已完成 2/4</span>
+          <div class="bar"><div></div></div>
+          <div class="add-btn">添加</div>
+        </div>
+        <div class="goal done"><div class="check on">✓</div><div class="goal-text">说出数据结构的三要素</div><div class="x">✕</div></div>
+        <div class="goal done"><div class="check on">✓</div><div class="goal-text">区分逻辑结构与存储结构</div><div class="x">✕</div></div>
+        <div class="goal"><div class="check off"></div><div class="goal-text">推导常见算法的时间复杂度</div><div class="x">✕</div></div>
+        <div class="goal"><div class="check off"></div><div class="goal-text">举一个顺序表插入的例子</div><div class="x">✕</div></div>
+      </div>
+    </div>
+    <div class="quick">
+      <div class="q-title">学习进度</div>
+      <div class="stat"><span class="k">章节</span><span class="v">4</span></div>
+      <div class="stat"><span class="k">术语</span><span class="v">12</span></div>
+      <div class="stat"><span class="k">目标达成</span><span class="v">5/8</span></div>
+      <div class="qbar"><div></div></div>
+      <div class="stat"><span class="k">问题掌握</span><span class="v">已掌握 3 · 模糊 1 · 未读 2</span></div>
+      <div class="divider"></div>
+      <div class="side-head"><span class="q-title">全书术语速查</span><div class="space"></div><div class="sbtn">速记</div></div>
+      <div class="term"><div class="term-name">数据结构<span class="term-page">P3</span></div><div class="term-ch">第1章 绪论</div></div>
+      <div class="term"><div class="term-name">逻辑结构<span class="term-page">P5</span></div><div class="term-ch">第1章 绪论</div></div>
+      <div class="term"><div class="term-name">时间复杂度<span class="term-page">P12</span></div><div class="term-ch">第1章 绪论</div></div>
+      <div class="term"><div class="term-name">顺序存储<span class="term-page">P34</span></div><div class="term-ch">第2章 线性表</div></div>
+      <div class="term"><div class="term-name">循环队列<span class="term-page">P58</span></div><div class="term-ch">第3章 栈与队列</div></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "教材章节导读工作台"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "教材章节导读工作台"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "书栈"
+    }
+  ]
+}
