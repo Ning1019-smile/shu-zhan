@@ -1,7 +1,7 @@
 {
   "app": {
-    "bundleName": "com.example.demopc",
-    "vendor": "example",
+    "bundleName": "com.ningzimo.shuzhan",
+    "vendor": "ningzimo",
     "versionCode": 1000000,
     "versionName": "1.0.0",
     "buildVersion": "1",
